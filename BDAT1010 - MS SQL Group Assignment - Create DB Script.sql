@@ -98,7 +98,7 @@ CREATE TABLE mov.Movies (
     Movie_Duration_in_Min INT,
     Movie_Worldwide_Earning_in_$M DECIMAL(15,2),
     Movie_Type VARCHAR(20) CONSTRAINT CK_Movie_Type CHECK (Movie_Type IN('Hollywood', 'Bollywood')),
-    Director_ID INT FOREIGN KEY REFERENCES mov.Movie_Director(Director_ID),
+    Director_ID INT CONSTRAINT FK_Director_ID FOREIGN KEY REFERENCES mov.Movie_Director(Director_ID),
     CreatedOn date NOT NULL Constraint DF_CreatedOn_Movies DEFAULT GETDATE()
 );
 GO
@@ -147,3 +147,104 @@ VALUES
 ('Oh My God', 2012, NULL, 'Hindi', 'Comedy', 165, 1200, 'Bollywood', 390),
 ('Pushpa', 2021, 'Mythri Movie Makers', 'Telugu', 'Drama', 179, 3730, 'Bollywood', 370);
 GO
+
+--Create the Movie_Actor table with constraints and specifications
+CREATE TABLE mov.Movie_Actor (
+    Actor_ID INT NOT NULL IDENTITY(10, 1) CONSTRAINT PK_Actor_ID PRIMARY KEY CLUSTERED,
+    Actor_First_Name VARCHAR(50),
+    Actor_Last_Name VARCHAR(50),
+    Actor_Age_in_Years INT,
+    Actor_Location VARCHAR(100),
+    Movie_ID INT CONSTRAINT FK_Movie_ID FOREIGN KEY REFERENCES mov.Movies(Movie_ID),
+    CreatedOn DATE CONSTRAINT DF_CreatedOn_Actor DEFAULT GETDATE() NOT NULL,
+    );
+GO
+
+--insert values into Movie_Actor table. Did not add Actor_ID or CreatedOn values as they are auto generated from constraints.
+INSERT INTO mov.Movie_Actor (Actor_First_Name, Actor_Last_Name, Actor_Age_in_Years, Actor_Location, Movie_ID)
+VALUES
+('Seth', 'Rogen', 53, 'Los Angeles', 1000),
+('Michael', 'Cera', 49, 'New York', 1001),
+('Josh', 'Duhamel', 37, 'North Dakota', 1002),
+('Jason', 'Sudeikis', 60, 'Kansas', 1003),
+('Robert', 'Pattinson', 45, 'Los Angeles', 1004),
+('Nathan', 'Fillion', 55, 'Canada', 1005),
+('Robert', 'Pattinson', 45, 'Los Angeles', 1006),
+('James', 'McAvoy', 49, 'Scotland', 1007),
+('Paul', 'Rudd', 52, 'New York', 1008),
+('Kenneth', 'Branagh', 44, 'Northern Ireland', 1009),
+('Hugh', 'Grant', 58, 'London', 1010),
+('Matthew', 'Goode', 46, 'England', 1011),
+('Judd', 'Apatow', 58, 'Los Angeles', 1012),
+('Michael', 'Fassbender', 46, 'Germany', 1013),
+('Dane', 'Cook', 52, 'United States', 1014),
+('Jason', 'Sudeikis', 60, 'Kansas', 1015),
+('Kelly', 'Asbury', 76, 'United States', 1016),
+('Matthew', 'McConaughey', 52, 'Los Angeles', 1017),
+('Vince', 'Vaughn', 60, 'Minnesota', 1018),
+('Kirk', 'Cameron', 59, 'United States', 1019),
+('James', 'Marsden', 50, 'Columbia', 1020),
+('Channing', 'Tatum', 58, 'Alabama', 1021),
+('Mike', 'Mills', 37, 'New York', 1022),
+('Aamir', 'Khan', 52, 'India', 1023),
+('Aamir', 'Khan', 52, 'India', 1024),
+('Shah Rukh', 'Khan', 53, 'India', 1025),
+('Prabhas', NULL, 53, 'India', 1026),
+('Allu', 'Arjun', 49, 'India', 1027),
+('Shah Rukh', 'Khan', 53, 'India', 1028),
+('Akshay', 'Kumar', 50, 'India', 1029);
+GO
+
+--Create the Movie_Rating table with constraints and specifications
+CREATE TABLE mov.Movie_Rating (
+    Movie_Rating_ID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_Movie_Rating_ID PRIMARY KEY CLUSTERED,
+    Rating_Audience_Score VARCHAR(50),
+    Rating_Rotten_Tomatoes VARCHAR(50),
+    Movie_ID INT CONSTRAINT FK_Movie_Rating_Movie_ID FOREIGN KEY (Movie_ID) REFERENCES mov.Movies(Movie_ID),
+    CreatedOn DATE CONSTRAINT DF_CreatedOn_Rating DEFAULT GETDATE() NOT NULL,
+);
+GO
+
+--Insert records into the Movie_Rating table. Did not add Movie_Rating_ID or CreatedOn values as they are auto generated from constraints.
+INSERT INTO mov.Movie_Rating (Rating_Audience_Score, Rating_Rotten_Tomatoes, Movie_ID)
+VALUES
+('70', '64', 1000),
+('52', '68', 1001),
+('44', '15', 1002),
+('72', '28', 1003),
+('72', '60', 1004),
+('67', '89', 1005),
+('82', '49', 1006),
+('74', '52', 1007),
+('47', '15', 1008),
+('84', '83', 1009),
+('70', '63', 1010),
+('49', '21', 1011),
+('83', '91', 1012),
+('77', '85', 1013),
+('61', '3', 1014),
+('56', '53', 1015),
+('52', '56', 1016),
+('47', '27', 1017),
+('52', '26', 1018),
+('51', '40', 1019),
+('80', '93', 1020),
+('66', '29', 1021),
+('80', '84', 1022),
+('95', '100', 1023),
+('81', '95', 1024),
+('79', '83', 1025),
+('80', '90', 1026),
+('76', '82', 1027),
+('85', '100', 1028),
+('81', '74', 1029);
+GO
+
+//*
+table creation complete
+Created 4 tables in total:
+mov.Movie_Director;
+mov.Movies;
+mov.Movie_Actor;
+mov.Movie_Rating;
+*//
