@@ -57,7 +57,7 @@ VALUES (
 	'Kevin', 'Smith', 52, 'Male',
 	'Miguel', 'Arteta', 41, 'Male',
 	'Mark', 'Johnson', 58, 'Male',
-	'Tom Vaughan 37 Male
+	'Tom', 'Vaughan', 37, 'Male',
 	Francis Lawrence 52 Male
 	Adrienne Shelly 40 Female
 	David Slade 53 Male
