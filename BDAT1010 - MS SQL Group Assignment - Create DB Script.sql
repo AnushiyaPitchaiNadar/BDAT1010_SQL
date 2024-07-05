@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS mov.Movie_Rating;
 
 --Create the Movie_Director table
 CREATE TABLE mov.Movie_Director(
-	Director_ID	int NOT NULL IDENTITY(100,10) PRIMARY KEY CLUSTERED,
+	Director_ID	int NOT NULL IDENTITY(100,10) PRIMARY KEY CLUSTERED,--what is a clustered index?
 	Director_First_Name varchar(50),
 	Director_Last_Name varchar(50),
 	Director_Age_in_Years int,
