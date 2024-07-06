@@ -240,11 +240,11 @@ VALUES
 ('81', '74', 1029);
 GO
 
-//*
+/*
 table creation complete
 Created 4 tables in total:
 mov.Movie_Director;
 mov.Movies;
 mov.Movie_Actor;
 mov.Movie_Rating;
-*//
+*/
