@@ -1,4 +1,4 @@
-/** 
+/*
 Final Group Project Part 1 - MS SQL
 BDAT1010-24S-30691
 
@@ -9,12 +9,13 @@ Anushiya Pitchai Nadar
 Fizaben Vahora
 
 Due: July 17, 2024
-**/
+*/
+
+--Question 1: Create a database “Movies”.
 
 --Switch to master Database
 USE [master]
 GO
-
 --Check to see if the database exists and drop it if it does
 IF EXISTS (SELECT name FROM sys.databases WHERE name = N'Movies')
 BEGIN
@@ -31,9 +32,11 @@ GO
 USE [Movies]
 GO
 
--- Create a "mov" schema under "Movies"
+--Question 2: Create a “mov” schema under “Movies”.
 CREATE SCHEMA mov;
 GO
+
+--Question 3: Create a table call “Movie_Director “under mov schema.
 
 --DROP tables prior to creating them to start from scratch
 DROP TABLE IF EXISTS mov.Movie_Director;
@@ -86,6 +89,8 @@ VALUES
     ('Aditya', 'Chopra', 51, 'Male'),
     ('Umesh', 'Shukla', 52, 'Male');
 GO
+
+--Question 4: Create a Movies table under mov schema
 
 --Create the Movies table with constraints and specifications
 CREATE TABLE mov.Movies (
@@ -148,6 +153,8 @@ VALUES
 ('Pushpa', 2021, 'Mythri Movie Makers', 'Telugu', 'Drama', 179, 3730, 'Bollywood', 370);
 GO
 
+--Question 5: Create a Movie_Actor table under mov schema 
+
 --Create the Movie_Actor table with constraints and specifications
 CREATE TABLE mov.Movie_Actor (
     Actor_ID INT NOT NULL IDENTITY(10, 1) CONSTRAINT PK_Actor_ID PRIMARY KEY CLUSTERED,
@@ -194,6 +201,8 @@ VALUES
 ('Shah Rukh', 'Khan', 53, 'India', 1028),
 ('Akshay', 'Kumar', 50, 'India', 1029);
 GO
+
+--Question 6: Create a Movie_Rating table under mov schema 
 
 --Create the Movie_Rating table with constraints and specifications
 CREATE TABLE mov.Movie_Rating (
@@ -251,8 +260,9 @@ mov.Movie_Rating;
 
 /* Queries
 7 sets of queries
-Nicole - Q13 - System Info Queries
 */
+
+--Question 13: Write the following Query based on the above datasets.
 
 --Retrieve the list of all Databases.
 SELECT name
@@ -381,9 +391,20 @@ SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 2, 0
 GO
 
 --Get all the information from the tables.
+SELECT * 
+FROM sys.databases
 
+SELECT * 
+FROM INFORMATION_SCHEMA.TABLES
+GO
 --Get all columns contain any constraints.
-
+SELECT * 
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+GO
 --Get all tables that contain a view.
 
 --Get all columns of table that using in views.
+
+/*
+End of Assignment
+*/
