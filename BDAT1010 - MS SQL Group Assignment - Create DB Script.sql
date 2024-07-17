@@ -255,30 +255,135 @@ Nicole - Q13 - System Info Queries
 */
 
 --Retrieve the list of all Databases.
-
---Switch to master Database
-USE [master]
-GO
 SELECT name
 FROM sys.databases
 WHERE state_desc = 'ONLINE';
 GO
 
---Display the byte size of all tables in databases.
-USE [Movies]
+-- Display the byte size of all tables in databases. (Anushiya, please double check this)
+USE [Movies] --switch to Movie database
 GO
-SELECT *
-FROM INFORMATION_SCHEMA.COLUMNS
+
+SELECT 
+    OBJECT_SCHEMA_NAME(object_id) AS SchemaName, -- use function to return schema name for all object_id's
+    OBJECT_NAME(object_id) AS TableName, -- use function to return table name for all object_id's
+    SUM(used_page_count) * 8 * 1024 AS TotalBytes -- this calculates the bytes
+FROM 
+    sys.dm_db_partition_stats
+WHERE
+	OBJECT_SCHEMA_NAME(object_id) = 'mov' --filter on mov schema
+GROUP BY 
+    OBJECT_SCHEMA_NAME(object_id), 
+    OBJECT_NAME(object_id)
+ORDER BY 
+    SchemaName, TableName;
+GO
+
+--List of tables with number of records.
+SELECT 
+    OBJECT_SCHEMA_NAME(object_id) AS SchemaName, --uses the OBJECT_SCHEMA_NAME() function to return the schema name for the object_id
+    OBJECT_NAME(object_id) AS TableName, --uses the OBJECT_NAME() function to return the table name for the object_id
+    SUM(rows) AS 'RowCount' --total the values in the row column to sum the total rows
+FROM 
+    sys.partitions
+WHERE
+	OBJECT_SCHEMA_NAME(object_id) = 'mov'
+GROUP BY 
+    object_id
+ORDER BY 
+    SchemaName, TableName;
+GO
+
+--List of Primary Key and Foreign Key for Whole Database.
+SELECT 
+    t.TABLE_SCHEMA,
+    t.TABLE_NAME,
+	c.CONSTRAINT_TYPE,
+	c.CONSTRAINT_NAME
+FROM 
+    INFORMATION_SCHEMA.TABLES t
+LEFT JOIN
+	INFORMATION_SCHEMA.TABLE_CONSTRAINTS c
+	ON t.TABLE_SCHEMA = c.TABLE_SCHEMA 
+    AND t.TABLE_NAME = c.TABLE_NAME 
+	AND c.CONSTRAINT_TYPE IN ('PRIMARY KEY', 'FOREIGN KEY') -- joins the t.tables table with the c.constraints table and provides conditions to only include primary key and foreign key records.
+ORDER BY 
+    t.TABLE_SCHEMA, 
+    t.TABLE_NAME;
+GO
+
+--Get all Nullable columns from a table
+SELECT 
+    COLUMN_NAME,
+	TABLE_NAME,
+	TABLE_SCHEMA
+FROM 
+    INFORMATION_SCHEMA.COLUMNS
+WHERE 
+   IS_NULLABLE = 'YES';
+GO
+
+--Get All table that do not have primary key.
+SELECT 
+    t.TABLE_SCHEMA,
+    t.TABLE_NAME
+FROM 
+    INFORMATION_SCHEMA.TABLES t
+WHERE 
+	NOT EXISTS ( --will check if the following parameters do not exist, in this case Primary Key. If no PK exists, then the table schema and name will output.
+        SELECT *
+        FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS c
+        WHERE 
+            c.TABLE_SCHEMA = t.TABLE_SCHEMA 
+            AND c.TABLE_NAME = t.TABLE_NAME 
+            AND c.CONSTRAINT_TYPE = 'PRIMARY KEY'
+    )
+ORDER BY 
+    t.TABLE_SCHEMA, 
+    t.TABLE_NAME;
+GO
+
+--Get All table that do not have identity column.
+--An identity column is a column that auto generates values, such as the GETDATE and AUTO INCREMENT (IDENTITY)
+USE[Movies]
+GO
+
+SELECT 
+    t.name AS TableName
+FROM 
+    sys.tables t
+WHERE 
+    NOT EXISTS ( --similar to query above, checks if the condition does not exist (is_identity column equal 1 in the sys.column) and returns records that don't meet the condition. In this case, all tables have identity columns.
+        SELECT 1
+        FROM sys.columns c
+        WHERE 
+            c.object_id = t.object_id
+            AND c.is_identity = 1
+    )
+ORDER BY 
+    t.name;
 GO
 
 --Get First Date of Current Month.
 SELECT DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS 'First Date of Current Month';
 GO
 
-SELECT DATETRUNC(GETDATE(), AS 'First Date of Current Month';
-GO
-
 --Get Last date of Current month.
 SELECT EOMONTH(GETDATE()) AS 'Last Date of Current Month';
+GO
 
-SELECT NEXTMONTH(GETDATE()) 
+--Get the first date of the next month. Cast as data instead of date + timestamp
+SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0) AS DATE) AS 'First Date of Next Month';
+GO
+
+--Get the last date of the next month
+SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 2, 0)) AS DATE) AS 'Last Date of Next Month';
+GO
+
+--Get all the information from the tables.
+
+--Get all columns contain any constraints.
+
+--Get all tables that contain a view.
+
+--Get all columns of table that using in views.
