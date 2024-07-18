@@ -572,6 +572,14 @@ WHERE m.Movie_Released_Year = 2010;
 UPDATE mov.Movie_Actor
 SET Actor_Age_in_Years = Actor_Age_in_Years + 2
 WHERE Actor_First_Name = 'Michael' AND Actor_Last_Name = 'Cera';
+
+-- d. Increase the Director Age by 3 years who has directed the movie “Leap Year”.
+UPDATE mov.Movie_Director
+SET Director_Age_in_Years = Director_Age_in_Years + 3
+FROM mov.Movie_Director d
+JOIN mov.Movies m ON d.Director_ID = m.Director_ID
+WHERE m.Movie_Name = 'Leap Year';
+GO
  
 -- e. Increase the Director and Actor Age by 1 year who has directed the movie “Leap Year”
 -- Update Director Age
