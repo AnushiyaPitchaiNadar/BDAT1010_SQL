@@ -454,14 +454,14 @@ FROM mov.Movies m
 JOIN mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID
 JOIN mov.Movie_Director d ON m.Director_ID = d.Director_ID
 JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID
-WHERE CAST(r.Rating_Audience_Score AS INT) > 80;
+WHERE r.Rating_Audience_Score > 80;
  
 -- f. Display all the Movies information whose Rating_Rotten_Tomatoes is more than 90%
 SELECT 
     m.*
 FROM mov.Movies m
 JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID
-WHERE CAST(r.Rating_Rotten_Tomatoes AS INT) > 90;
+WHERE r.Rating_Rotten_Tomatoes > 90;
 
 /** 
 
@@ -673,6 +673,8 @@ JOIN
 GO
  
 -- e. Create a view to display all the information based on the result set returned by the query
+-- List movie, Director_FullName, Director_Age_in_Years, Director_Gender from Director
+-- [Director_FullName =Director_First_Name +"" + Director_Last_Name]
 CREATE VIEW mov.v_MoviesDirectorsFullName AS
 SELECT 
     m.Movie_ID, 
