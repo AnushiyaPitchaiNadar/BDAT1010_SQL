@@ -569,7 +569,7 @@ GO
 
 --l. Get all the information from the tables.
 SELECT * 
-FROM INFORMATION_SCHEMA.
+FROM INFORMATION_SCHEMA.TABLES;
 GO
 
 --m. Get all columns contain any constraints.
