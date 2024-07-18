@@ -262,15 +262,192 @@ mov.Movie_Rating;
 7 sets of queries
 */
 
+-- 8. Write the following Query based on the above datasets
+-- a. Display all the Movies and their Actors information based on the relationship
+SELECT m.Movie_Name, a.Actor_First_Name, a.Actor_Last_Name
+FROM mov.Movies m
+JOIN mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID;
+  
+-- b. Display the Movies name and their Ratings
+SELECT m.Movie_Name, r.Rating_Audience_Score, r.Rating_Rotten_Tomatoes
+FROM mov.Movies m
+JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID;
+ 
+-- c. Display all the Movies, Actors, and Directors information based on the relationship
+SELECT 
+    m.Movie_Name, 
+    a.Actor_First_Name, a.Actor_Last_Name,
+    d.Director_First_Name, d.Director_Last_Name
+FROM mov.Movies m
+JOIN mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID
+JOIN mov.Movie_Director d ON m.Director_ID = d.Director_ID;
+ 
+-- d. Display all the Movies, Actors, Directors, and Movie Rating information based on the relationship
+SELECT 
+    m.Movie_Name, 
+    a.Actor_First_Name, a.Actor_Last_Name,
+    d.Director_First_Name, d.Director_Last_Name,
+    r.Rating_Audience_Score, r.Rating_Rotten_Tomatoes
+FROM mov.Movies m
+JOIN mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID
+JOIN mov.Movie_Director d ON m.Director_ID = d.Director_ID
+JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID;
+ 
+-- e. Display all the Movies, Actors, Directors, and Movie Rating information
+--	  whose Rating_Audience_Score is more than 80% based on the relationship
+SELECT 
+    m.Movie_Name, 
+    a.Actor_First_Name, a.Actor_Last_Name,
+    d.Director_First_Name, d.Director_Last_Name,
+    r.Rating_Audience_Score, r.Rating_Rotten_Tomatoes
+FROM mov.Movies m
+JOIN mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID
+JOIN mov.Movie_Director d ON m.Director_ID = d.Director_ID
+JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID
+WHERE CAST(r.Rating_Audience_Score AS INT) > 80;
+ 
+-- f. Display all the Movies information whose Rating_Rotten_Tomatoes is more than 90%
+SELECT 
+    m.*
+FROM mov.Movies m
+JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID
+WHERE CAST(r.Rating_Rotten_Tomatoes AS INT) > 90;
+ 
+ 
+-- 11. Write the following Query based on the above datasets
+-- a. Update the Rating_Audience_Score by 85% for the movie released by “The Weinstein Company” studio
+UPDATE r
+SET r.Rating_Audience_Score = '85'
+FROM mov.Movie_Rating r
+JOIN mov.Movies m ON r.Movie_ID = m.Movie_ID
+WHERE m.Movie_Lead_Studio = 'The Weinstein Company';
+
+-- b. Update the Rating_Rotten_Tomatoes by 75% for the movie released in Year 2010
+UPDATE r
+SET r.Rating_Rotten_Tomatoes = '75'
+FROM mov.Movie_Rating r
+JOIN mov.Movies m ON r.Movie_ID = m.Movie_ID
+WHERE m.Movie_Released_Year = 2010;
+ 
+-- c. Increase the Actor Age by 2 years whose Name is “Michael Cera”
+UPDATE mov.Movie_Actor
+SET Actor_Age_in_Years = Actor_Age_in_Years + 2
+WHERE Actor_First_Name = 'Michael' AND Actor_Last_Name = 'Cera';
+ 
+-- e. Increase the Director and Actor Age by 1 year who has directed the movie “Leap Year”
+-- Update Director Age
+UPDATE d
+SET d.Director_Age_in_Years = d.Director_Age_in_Years + 1
+FROM mov.Movie_Director d
+JOIN mov.Movies m ON d.Director_ID = m.Director_ID
+WHERE m.Movie_Name = 'Leap Year';
+ 
+-- Update Actor Age
+UPDATE a
+SET a.Actor_Age_in_Years = a.Actor_Age_in_Years + 1
+FROM mov.Movie_Actor a
+JOIN mov.Movies m ON a.Movie_ID = m.Movie_ID
+WHERE m.Movie_Name = 'Leap Year';
+ 
+ 
+-- 12. Write the following Query based on the above datasets
+-- a. Create a view to display all the movie information
+CREATE VIEW mov.v_AllMovies AS
+SELECT 
+    Movie_ID, 
+    Movie_Name, 
+    Movie_Released_Year, 
+    Movie_Lead_Studio, 
+    Movie_Language, 
+    Movie_Category, 
+    Movie_Duration_in_Min, 
+    Movie_Worldwide_Earning_in_$M, 
+    Movie_Type, 
+    Director_ID, 
+    CreatedOn
+FROM 
+    mov.Movies;
+GO
+ 
+-- b. Create a view to display all the movies and their rating information
+CREATE VIEW mov.v_MoviesAndRatings AS
+SELECT 
+    m.Movie_ID, 
+    m.Movie_Name, 
+    r.Rating_Audience_Score, 
+    r.Rating_Rotten_Tomatoes
+FROM 
+    mov.Movies m
+JOIN 
+    mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID;
+GO
+ 
+-- c. Create a view to display all the movies and their actor information
+CREATE VIEW mov.v_MoviesAndActors AS
+SELECT 
+    m.Movie_ID, 
+    m.Movie_Name, 
+    a.Actor_ID, 
+    a.Actor_First_Name, 
+    a.Actor_Last_Name, 
+    a.Actor_Age_in_Years, 
+    a.Actor_Location
+FROM 
+    mov.Movies m
+JOIN 
+    mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID;
+GO
+ 
+-- d. Create a view to display all the movies, rating, actor along with director information
+CREATE VIEW mov.v_MoviesRatingsActorsDirectors AS
+SELECT 
+    m.Movie_ID, 
+    m.Movie_Name, 
+    r.Rating_Audience_Score, 
+    r.Rating_Rotten_Tomatoes, 
+    a.Actor_ID, 
+    a.Actor_First_Name, 
+    a.Actor_Last_Name, 
+    a.Actor_Age_in_Years, 
+    a.Actor_Location, 
+    d.Director_ID, 
+    d.Director_First_Name, 
+    d.Director_Last_Name, 
+    d.Director_Age_in_Years, 
+    d.Director_Gender
+FROM 
+    mov.Movies m
+JOIN 
+    mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID
+JOIN 
+    mov.Movie_Actor a ON m.Movie_ID = a.Movie_ID
+JOIN 
+    mov.Movie_Director d ON m.Director_ID = d.Director_ID;
+GO
+ 
+-- e. Create a view to display all the information based on the result set returned by the query
+CREATE VIEW mov.v_MoviesDirectorsFullName AS
+SELECT 
+    m.Movie_ID, 
+    m.Movie_Name, 
+    CONCAT(d.Director_First_Name, ' ', d.Director_Last_Name) AS Director_FullName, 
+    d.Director_Age_in_Years, 
+    d.Director_Gender
+FROM 
+    mov.Movies m
+JOIN 
+    mov.Movie_Director d ON m.Director_ID = d.Director_ID;
+GO
+
 --Question 13: Write the following Query based on the above datasets.
 
---Retrieve the list of all Databases.
+--a. Retrieve the list of all Databases.
 SELECT name
 FROM sys.databases
 WHERE state_desc = 'ONLINE';
 GO
 
--- Display the byte size of all tables in databases. (Anushiya, please double check this)
+-- b. Display the byte size of all tables in databases. (Anushiya, please double check this)
 USE [Movies] --switch to Movie database
 GO
 
@@ -289,7 +466,7 @@ ORDER BY
     SchemaName, TableName;
 GO
 
---List of tables with number of records.
+--c.List of tables with number of records.
 SELECT 
     OBJECT_SCHEMA_NAME(object_id) AS SchemaName, --uses the OBJECT_SCHEMA_NAME() function to return the schema name for the object_id
     OBJECT_NAME(object_id) AS TableName, --uses the OBJECT_NAME() function to return the table name for the object_id
@@ -304,7 +481,7 @@ ORDER BY
     SchemaName, TableName;
 GO
 
---List of Primary Key and Foreign Key for Whole Database.
+--d.List of Primary Key and Foreign Key for Whole Database.
 SELECT 
     t.TABLE_SCHEMA,
     t.TABLE_NAME,
@@ -322,7 +499,7 @@ ORDER BY
     t.TABLE_NAME;
 GO
 
---Get all Nullable columns from a table
+--e. Get all Nullable columns from a table
 SELECT 
     COLUMN_NAME,
 	TABLE_NAME,
@@ -333,7 +510,7 @@ WHERE
    IS_NULLABLE = 'YES';
 GO
 
---Get All table that do not have primary key.
+--f. Get All table that do not have primary key.
 SELECT 
     t.TABLE_SCHEMA,
     t.TABLE_NAME
@@ -353,7 +530,7 @@ ORDER BY
     t.TABLE_NAME;
 GO
 
---Get All table that do not have identity column.
+--g. Get All table that do not have identity column.
 --An identity column is a column that auto generates values, such as the GETDATE and AUTO INCREMENT (IDENTITY)
 USE[Movies]
 GO
@@ -374,36 +551,63 @@ ORDER BY
     t.name;
 GO
 
---Get First Date of Current Month.
+--h. Get First Date of Current Month.
 SELECT DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS 'First Date of Current Month';
 GO
 
---Get Last date of Current month.
+--i. Get Last date of Current month.
 SELECT EOMONTH(GETDATE()) AS 'Last Date of Current Month';
 GO
 
---Get the first date of the next month. Cast as data instead of date + timestamp
+--j. Get the first date of the next month. Cast as data instead of date + timestamp
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0) AS DATE) AS 'First Date of Next Month';
 GO
 
---Get the last date of the next month
+--k. Get the last date of the next month
 SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 2, 0)) AS DATE) AS 'Last Date of Next Month';
 GO
 
---Get all the information from the tables.
+--l. Get all the information from the tables.
 SELECT * 
-FROM sys.databases
-
-SELECT * 
-FROM INFORMATION_SCHEMA.TABLES
+FROM INFORMATION_SCHEMA.
 GO
---Get all columns contain any constraints.
-SELECT * 
-FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
-GO
---Get all tables that contain a view.
 
---Get all columns of table that using in views.
+--m. Get all columns contain any constraints.
+SELECT 
+    COLUMN_NAME, CONSTRAINT_NAME
+FROM 
+    INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE
+ORDER BY 
+    COLUMN_NAME;
+
+-- n. Get all tables that contain a view.
+SELECT DISTINCT
+    v.name AS ViewName,
+    t.name AS TableName
+FROM 
+    sys.views v
+JOIN 
+    sys.sql_expression_dependencies sed ON v.object_id = sed.referencing_id
+JOIN 
+    sys.tables t ON sed.referenced_id = t.object_id
+ORDER BY
+    v.name, t.name;
+
+--o. Get all columns of table that using in views.
+SELECT DISTINCT
+    v.name AS ViewName,
+    t.name AS TableName,
+    c.name AS ColumnName
+FROM 
+    sys.views v
+JOIN 
+    sys.sql_expression_dependencies sed ON v.object_id = sed.referencing_id
+JOIN 
+    sys.columns c ON sed.referenced_id = c.object_id
+JOIN 
+    sys.tables t ON c.object_id = t.object_id
+ORDER BY
+    v.name, t.name, c.name;
 
 /*
 End of Assignment
