@@ -258,6 +258,250 @@ mov.Movie_Actor;
 mov.Movie_Rating;
 */
 
+
+/** 
+     Query 7 
+	 
+**/
+
+
+--a. List all the Movies information from the Movies table:
+BEGIN
+    SELECT * FROM mov.Movies;
+END
+GO
+
+--b. List all the Director information from the Director table:
+BEGIN
+    SELECT * FROM mov.Movie_Director;
+END
+GO
+
+--c. List all the Actor information from the Actor table:
+BEGIN
+    SELECT * FROM mov.Movie_Actor;
+END
+GO
+
+--d. List all the Rating information from the Rating table:
+BEGIN
+    SELECT * FROM mov.Movie_Rating;
+END
+GO
+
+--e. List all the movies released in the year “2010”:
+BEGIN
+    SELECT Movie_Name, Movie_Released_Year 
+    FROM mov.Movies 
+    WHERE Movie_Released_Year = 2010;
+END
+GO
+
+--f. List all the movies released by “The Weinstein Company” studio:
+BEGIN
+    SELECT Movie_Name,Movie_Lead_Studio
+	FROM mov.Movies
+	WHERE Movie_Lead_Studio = 'The Weinstein Company';
+END
+GO
+
+--g. List all the movies released in “English”:
+BEGIN
+    SELECT Movie_Name,Movie_Language
+	FROM mov.Movies
+	WHERE Movie_Language = 'English';
+END
+GO
+
+--h. List all the movies whose name starts with ‘G’:
+BEGIN
+    SELECT Movie_Name
+	FROM mov.Movies
+	WHERE Movie_Name LIKE 'G%';
+END
+Go
+
+--i.Display all the movies under the “Comedy” category:
+BEGIN
+    SELECT Movie_Name,Movie_Category
+	FROM mov.Movies
+	WHERE Movie_Category = 'Comedy';
+END
+GO
+
+--j. Display all the movies where movie type is “Hollywood”:
+BEGIN
+    SELECT Movie_Name,Movie_Type
+	FROM mov.Movies 
+	WHERE Movie_Type = 'Hollywood';
+END
+GO
+
+--k. Display all the “Female” directors:
+BEGIN
+    SELECT * 
+	FROM mov.Movie_Director 
+	WHERE Director_Gender = 'Female';
+END
+GO
+
+--l. Display all the directors whose Age is more than 45 years:
+BEGIN
+    SELECT Director_ID,Director_First_Name,Director_Last_Name,Director_Age_in_Years 
+	FROM mov.Movie_Director 
+	WHERE Director_Age_in_Years > 45;
+END
+GO
+
+--m. Display all the Actors from “Los Angeles”:
+BEGIN
+    SELECT Actor_ID,Actor_First_Name,Actor_Last_Name,Actor_Location 
+	FROM mov.Movie_Actor 
+	WHERE Actor_Location = 'Los Angeles';
+END
+GO
+
+--n. Display all the Actors whose Age is less than 50 years:
+BEGIN
+    SELECT Actor_ID,Actor_First_Name,Actor_Last_Name,Actor_Age_in_Years
+	FROM mov.Movie_Actor 
+	WHERE Actor_Age_in_Years < 50;
+END
+GO
+
+--o.Display all the Actors whose name starts with “J”:
+BEGIN
+    SELECT Actor_First_Name 
+	FROM mov.Movie_Actor 
+	WHERE Actor_First_Name LIKE 'J%';
+END
+GO
+
+--p. Display all the Actors who are from “Los Angeles” or “New York”:
+BEGIN
+    SELECT Actor_First_Name,Actor_Last_Name,Actor_Location 
+	FROM mov.Movie_Actor 
+	WHERE Actor_Location IN ('Los Angeles', 'New York');
+END
+GO
+
+
+--q. List Director_FullName, Director_Age_in_Years, Director_Gender from Director:
+BEGIN
+    SELECT 
+        Director_First_Name + ' ' + ISNULL(Director_Last_Name, '') AS Director_FullName, 
+        Director_Age_in_Years, 
+        Director_Gender 
+    FROM 
+        mov.Movie_Director;
+END
+GO
+
+--r. List Director_FullName, Director_Age_in_Years, Director_Gender from Director whose Age is less than 45 years:
+BEGIN
+    SELECT 
+        Director_First_Name + ' ' + ISNULL(Director_Last_Name, '') AS Director_FullName, 
+        Director_Age_in_Years, 
+        Director_Gender 
+    FROM 
+        mov.Movie_Director
+    WHERE 
+        Director_Age_in_Years < 45;
+END
+GO
+
+
+
+/** 
+
+    Query 9
+
+**/
+
+--a. Create a new table MovieCopy and copy all records of Movie table
+BEGIN
+    SELECT *
+    INTO mov.MovieCopy
+    FROM mov.Movies;
+END
+GO
+
+--b. Create a new table DirectorCopy and copy only the schema of the director table
+BEGIN
+    SELECT TOP 0 *
+    INTO mov.DirectorCopy
+    FROM mov.Movie_Director;
+END
+GO
+
+--c. Create a new table ActorCopy and copy all records of Actor table
+BEGIN
+    SELECT *
+    INTO mov.ActorCopy
+    FROM mov.Movie_Actor;
+END
+GO
+
+--d. Create a new table RatingCopy and copy all records of Rating table
+BEGIN
+    SELECT *
+    INTO mov.RatingCopy
+    FROM mov.Movie_Rating;
+END
+GO
+
+--e. Create a new table RatingCopies and copy only the schema from Rating table
+BEGIN
+    SELECT TOP 0 *
+    INTO mov.RatingCopies
+    FROM mov.Movie_Rating;
+END
+GO
+
+/**
+
+      Query 10 -- Deleting records
+
+**/
+
+--a. Delete all the records from the RatingCopy table
+BEGIN
+    DELETE FROM mov.RatingCopy;
+END
+GO
+
+--b. Delete all the movies from MovieCopy whose released in year “2010”
+BEGIN
+    DELETE FROM mov.MovieCopy
+    WHERE Movie_Released_Year = 2010;
+END
+GO
+
+--c. Delete all the movies from MovieCopy where language is 'Hindi'
+BEGIN
+    DELETE FROM mov.MovieCopy
+    WHERE Movie_Language = 'Hindi';
+END
+GO
+
+--d. Delete all the movies from MovieCopy where Rating_Audience_Score is less than 80%
+BEGIN
+    DELETE mc
+    FROM mov.MovieCopy mc
+    JOIN mov.Movie_Rating mr ON mc.Movie_ID = mr.Movie_ID
+    WHERE CAST(mr.Rating_Audience_Score AS INT) < 80;
+END
+GO
+
+--e. Delete all the movies from MovieCopy where Rating_Rotten_Tomatoes is less than 70%
+BEGIN
+    DELETE mc
+    FROM mov.MovieCopy mc
+    JOIN mov.Movie_Rating mr ON mc.Movie_ID = mr.Movie_ID
+    WHERE CAST(mr.Rating_Rotten_Tomatoes AS INT) < 70;
+END
+GO
+
 /* Queries
 7 sets of queries
 */
@@ -612,3 +856,5 @@ ORDER BY
 /*
 End of Assignment
 */
+
+
