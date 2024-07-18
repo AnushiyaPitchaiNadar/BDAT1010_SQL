@@ -258,7 +258,6 @@ mov.Movie_Actor;
 mov.Movie_Rating;
 */
 
-<<<<<<< HEAD
 
 /** 
      Query 7 
@@ -503,13 +502,6 @@ BEGIN
 END
 GO
 
-
-
-
-
-
-
-=======
 /* Queries
 7 sets of queries
 */
@@ -864,4 +856,5 @@ ORDER BY
 /*
 End of Assignment
 */
->>>>>>> 45b26be281d974fbffba586332c121e99e6c1d4a
+
+
