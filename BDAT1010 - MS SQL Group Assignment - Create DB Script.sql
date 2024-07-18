@@ -258,10 +258,12 @@ mov.Movie_Actor;
 mov.Movie_Rating;
 */
 
+/* Queries
+7 sets of queries
+*/
 
 /** 
-     Query 7 
-	 
+Question 7	 
 **/
 
 
@@ -410,103 +412,7 @@ BEGIN
 END
 GO
 
-
-
-/** 
-
-    Query 9
-
-**/
-
---a. Create a new table MovieCopy and copy all records of Movie table
-BEGIN
-    SELECT *
-    INTO mov.MovieCopy
-    FROM mov.Movies;
-END
-GO
-
---b. Create a new table DirectorCopy and copy only the schema of the director table
-BEGIN
-    SELECT TOP 0 *
-    INTO mov.DirectorCopy
-    FROM mov.Movie_Director;
-END
-GO
-
---c. Create a new table ActorCopy and copy all records of Actor table
-BEGIN
-    SELECT *
-    INTO mov.ActorCopy
-    FROM mov.Movie_Actor;
-END
-GO
-
---d. Create a new table RatingCopy and copy all records of Rating table
-BEGIN
-    SELECT *
-    INTO mov.RatingCopy
-    FROM mov.Movie_Rating;
-END
-GO
-
---e. Create a new table RatingCopies and copy only the schema from Rating table
-BEGIN
-    SELECT TOP 0 *
-    INTO mov.RatingCopies
-    FROM mov.Movie_Rating;
-END
-GO
-
-/**
-
-      Query 10 -- Deleting records
-
-**/
-
---a. Delete all the records from the RatingCopy table
-BEGIN
-    DELETE FROM mov.RatingCopy;
-END
-GO
-
---b. Delete all the movies from MovieCopy whose released in year “2010”
-BEGIN
-    DELETE FROM mov.MovieCopy
-    WHERE Movie_Released_Year = 2010;
-END
-GO
-
---c. Delete all the movies from MovieCopy where language is 'Hindi'
-BEGIN
-    DELETE FROM mov.MovieCopy
-    WHERE Movie_Language = 'Hindi';
-END
-GO
-
---d. Delete all the movies from MovieCopy where Rating_Audience_Score is less than 80%
-BEGIN
-    DELETE mc
-    FROM mov.MovieCopy mc
-    JOIN mov.Movie_Rating mr ON mc.Movie_ID = mr.Movie_ID
-    WHERE CAST(mr.Rating_Audience_Score AS INT) < 80;
-END
-GO
-
---e. Delete all the movies from MovieCopy where Rating_Rotten_Tomatoes is less than 70%
-BEGIN
-    DELETE mc
-    FROM mov.MovieCopy mc
-    JOIN mov.Movie_Rating mr ON mc.Movie_ID = mr.Movie_ID
-    WHERE CAST(mr.Rating_Rotten_Tomatoes AS INT) < 70;
-END
-GO
-
-/* Queries
-7 sets of queries
-*/
-
--- 8. Write the following Query based on the above datasets
+-- Question 8: Write the following Query based on the above datasets
 -- a. Display all the Movies and their Actors information based on the relationship
 SELECT m.Movie_Name, a.Actor_First_Name, a.Actor_Last_Name
 FROM mov.Movies m
@@ -556,9 +462,98 @@ SELECT
 FROM mov.Movies m
 JOIN mov.Movie_Rating r ON m.Movie_ID = r.Movie_ID
 WHERE CAST(r.Rating_Rotten_Tomatoes AS INT) > 90;
- 
- 
--- 11. Write the following Query based on the above datasets
+
+/** 
+
+Question 9
+
+**/
+
+--a. Create a new table MovieCopy and copy all records of Movie table
+BEGIN
+    SELECT *
+    INTO mov.MovieCopy
+    FROM mov.Movies;
+END
+GO
+
+--b. Create a new table DirectorCopy and copy only the schema of the director table
+BEGIN
+    SELECT TOP 0 *
+    INTO mov.DirectorCopy
+    FROM mov.Movie_Director;
+END
+GO
+
+--c. Create a new table ActorCopy and copy all records of Actor table
+BEGIN
+    SELECT *
+    INTO mov.ActorCopy
+    FROM mov.Movie_Actor;
+END
+GO
+
+--d. Create a new table RatingCopy and copy all records of Rating table
+BEGIN
+    SELECT *
+    INTO mov.RatingCopy
+    FROM mov.Movie_Rating;
+END
+GO
+
+--e. Create a new table RatingCopies and copy only the schema from Rating table
+BEGIN
+    SELECT TOP 0 *
+    INTO mov.RatingCopies
+    FROM mov.Movie_Rating;
+END
+GO
+
+/**
+
+Question 10 -- Deleting records
+
+**/
+
+--a. Delete all the records from the RatingCopy table
+BEGIN
+    DELETE FROM mov.RatingCopy;
+END
+GO
+
+--b. Delete all the movies from MovieCopy whose released in year “2010”
+BEGIN
+    DELETE FROM mov.MovieCopy
+    WHERE Movie_Released_Year = 2010;
+END
+GO
+
+--c. Delete all the movies from MovieCopy where language is 'Hindi'
+BEGIN
+    DELETE FROM mov.MovieCopy
+    WHERE Movie_Language = 'Hindi';
+END
+GO
+
+--d. Delete all the movies from MovieCopy where Rating_Audience_Score is less than 80%
+BEGIN
+    DELETE mc
+    FROM mov.MovieCopy mc
+    JOIN mov.Movie_Rating mr ON mc.Movie_ID = mr.Movie_ID
+    WHERE CAST(mr.Rating_Audience_Score AS INT) < 80;
+END
+GO
+
+--e. Delete all the movies from MovieCopy where Rating_Rotten_Tomatoes is less than 70%
+BEGIN
+    DELETE mc
+    FROM mov.MovieCopy mc
+    JOIN mov.Movie_Rating mr ON mc.Movie_ID = mr.Movie_ID
+    WHERE CAST(mr.Rating_Rotten_Tomatoes AS INT) < 70;
+END
+GO
+
+-- Question 11: Write the following Query based on the above datasets
 -- a. Update the Rating_Audience_Score by 85% for the movie released by “The Weinstein Company” studio
 UPDATE r
 SET r.Rating_Audience_Score = '85'
@@ -594,7 +589,7 @@ JOIN mov.Movies m ON a.Movie_ID = m.Movie_ID
 WHERE m.Movie_Name = 'Leap Year';
  
  
--- 12. Write the following Query based on the above datasets
+-- Question 12: Write the following Query based on the above datasets
 -- a. Create a view to display all the movie information
 CREATE VIEW mov.v_AllMovies AS
 SELECT 
